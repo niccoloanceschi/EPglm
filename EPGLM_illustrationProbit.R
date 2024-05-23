@@ -6,10 +6,9 @@ library("TruncatedNormal")
 library("truncnorm")
 library("transport")
 
-
-######################################################
-# LOAD THE DATA
-######################################################
+###################################################### -
+# LOAD THE DATA ----
+###################################################### -
 load("Data-and-Results/Alzheimer_Interactions.RData")
 
 seed = 1
@@ -41,9 +40,9 @@ if(RUN){
   predProbEP     = double(length = length(yTest))
   predProbMC     = double(length = length(yTest))
   
-  ######################################################
-  # PFM
-  ######################################################
+  ###################################################### -
+  # PFM ----
+  ###################################################### -
   tolerance = 1e-3 # tolerance to establish ELBO convergence
   startTime = Sys.time()
   paramsPFM = getParamsPFM(X=X,y=y,nu2=nu2,moments=TRUE,predictive=TRUE,tolerance=tolerance,maxIter=1e4)
@@ -70,9 +69,9 @@ if(RUN){
   }
   timePFMpredProb = difftime(Sys.time(), startTime, units=("secs"))[[1]]
   
-  ######################################################
-  # EP
-  ######################################################
+  ###################################################### -
+  # EP ----
+  ###################################################### -
   Omega0   = diag(nu2,p,p)
   beta0    = rep(0.,p)
   
@@ -93,9 +92,9 @@ if(RUN){
   }
   timeEPpredProb = difftime(Sys.time(), startTime, units=("secs"))[[1]]
   
-  ######################################################
-  # EXACT SAMPLING
-  ######################################################
+  ###################################################### -
+  # EXACT SAMPLING ----
+  ###################################################### -
   startTime = Sys.time()
   betaMC = rSUNpost(X=X,y=y,nu2=nu2,nSample=nSample)
   
@@ -111,9 +110,9 @@ if(RUN){
   }
   timeMCpredProb = difftime(Sys.time(), startTime, units=("secs"))[[1]]
   
-  ######################################################
-  # CHECK RUNNING TIMES AND NUMBER OF ITERATIONS
-  ######################################################
+  ###################################################### -
+  # CHECK RUNNING TIMES AND NUMBER OF ITERATIONS ----
+  ###################################################### -
   timeMC # in second
   timeMCpredProb # in seconds
   timePFM # in seconds
@@ -124,9 +123,9 @@ if(RUN){
   paramsPFM$nIter
   paramsEP$nIter
   
-  ######################################################
-  # COMPUTE AND SAVE THE NEEDED SUMMARY STATISTICS
-  ######################################################
+  ###################################################### -
+  # COMPUTE AND SAVE THE NEEDED SUMMARY STATISTICS ----
+  ###################################################### -
   
   # save(meanMC,meanPFM,meanEP,
   #      predProbMC,predProbPFM,predProbEP,
@@ -160,9 +159,9 @@ predData = melt(pred)[,-1]
 predData$group1 = c("Predictive Probabilities")
 predData$y = c(predProbMC,predProbMC)
 
-######################################################################
-# BOXPLOTS
-######################################################################
+###################################################################### -
+# BOXPLOTS ----
+###################################################################### -
 ### Comparison different methods via box-plot
 EP_Diff_mean_Beta  = meanMC - meanEP
 PFM_Diff_mean_Beta = meanMC - meanPFM

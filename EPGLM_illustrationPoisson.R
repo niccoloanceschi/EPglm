@@ -5,15 +5,15 @@ library("rstan")
 library("bpr")
 source("EPGLM_fcts.R")
 
-######################################################
-# DATA LOADING
-######################################################
+###################################################### -
+# DATA LOADING ----
+###################################################### -
 load(file="Data-and-Results/football_large_p.RData")
 X <- as.matrix(data2[,-1])
 y <- data2[,1]
 p <- ncol(X)
 
-# Hyper-parameters -------------------------------------------------------------
+## Hyper-parameters ----
 
 seed = 123          # seed for random number generation 
 
@@ -26,7 +26,7 @@ Omega0   = diag(om2p,p,p)
 beta0    = rep(0.,p)
 
 
-# Split train-test -------------------------------------------------------------
+## Split train-test ----
 set.seed(seed)
 n        = length(y)
 nTest    = 60
@@ -39,9 +39,9 @@ X      = X[-labTest,]
 y_test = y[labTest]
 y      = y[-labTest]
 
-######################################################
-# DEFINE POISSON MODEL IN STAN
-######################################################
+###################################################### -
+# DEFINE POISSON MODEL IN STAN ----
+###################################################### -
 burn = 1e3
 nChains_mcmc = 5
 nSample_stan = as.integer(nSample/nChains_mcmc+burn) # so we have nSample samples after burnin
@@ -64,9 +64,9 @@ poissonGLM_diagPrior = 'data{
                         }'
 
 
-######################################################
-# GET HMC SAMPLES
-######################################################  
+###################################################### -
+# GET HMC SAMPLES ----
+###################################################### -
 data_stan = list(N=nTrain,K=p,Y=as.vector(y),X=X,devStd=sqrt(om2p))
 
 # If RUN=T run the code
@@ -88,9 +88,9 @@ if(RUN){
   timeHMCpredMean = difftime(Sys.time(), startTime, units=("secs"))[[1]] # timeMCMC_algo[i] + difftime(Sys.time(), startTime, units=("secs"))[[1]]
   
   
-  ######################################################
-  # GET EP POSTERIOR MOMENTS
-  ######################################################
+  ###################################################### -
+  # GET EP POSTERIOR MOMENTS ----
+  ###################################################### -
   startTime = Sys.time()
   paramsEP = getParamsEP(X,y,family='poisson',Omega0=Omega0,beta0=beta0,approxHybrid=T,
                          fullVar=TRUE,damp=1.,nPrint=100,tolerance=tolerance,maxIter=1e5)
