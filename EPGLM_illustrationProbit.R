@@ -207,7 +207,7 @@ Data_boxplot$Method = factor(Data_boxplot$Method, c("EP","PFM-VB"))
 Plot_Diff = ggplot(Data_boxplot, aes(y=Diff, x=Method,col=Method)) +
   geom_boxplot()+
   scale_colour_manual(values = alpha(col_meth,c(1,1)))+
-  theme_bw()+ geom_hline(yintercept=0, linetype="dashed", size=2)+
+  theme_bw()+ geom_hline(yintercept=0, linetype="dashed", linewidth=2)+
   theme(axis.title=element_blank(),axis.text=element_text(size=15) ,
         strip.text = element_text(size=15),legend.position = "none")+
   facet_wrap(.~Functional, scales = "free", labeller=label_parsed)
