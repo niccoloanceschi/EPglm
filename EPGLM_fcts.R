@@ -174,16 +174,15 @@ zeta1 = function(x){exp(dnorm(x, log = T) - pnorm(x,log.p = T))}
 zeta2 = function(x,z1){-z1^2-x*z1}
 
 getParamsEPprobit = function(X,y,nu2,
-                       tolerance=1e-3,maxIter=1e3,nPrint=100,
-                       fullVar=FALSE,predictive=FALSE,
-                       algo_large_p=FALSE){
+                             tolerance=1e-3,maxIter=1e3,nPrint=100,
+                             fullVar=FALSE,predictive=FALSE,
+                             force_highdim_algo=FALSE){
 
   n = dim(X)[1]
   p = dim(X)[2]
-
-
+  
   ### Initialization
-  if(p<n && algo_large_p == F){
+  if(p<n && force_highdim_algo == F){
     invQ = diag(nu2,p,p)
   }else{
     V = nu2*t(X)
@@ -199,7 +198,7 @@ getParamsEPprobit = function(X,y,nu2,
 
   ### Iterations
 
-  if(p<n && algo_large_p == F){
+  if(p<n && force_highdim_algo == F){
 
     while(diff > tolerance && nIter < maxIter){
 
@@ -307,7 +306,7 @@ getParamsEPprobit = function(X,y,nu2,
 
   ### Posterior Approximate Moments
 
-  if(p<n && algo_large_p == F){
+  if(p<n && force_highdim_algo == F){
 
     meanBeta = invQ%*%r
     diagOmega = diag(invQ)
@@ -322,14 +321,14 @@ getParamsEPprobit = function(X,y,nu2,
                  nIter = nIter, kEP = k, mEP = m)
 
   if(fullVar==TRUE){
-    if(p>=n || algo_large_p == T) {
+    if(p>=n || force_highdim_algo == T) {
       invQ = nu2*(diag(1,p,p) - V%*%(k*X))
     }
     results = append(list(Omega=invQ),results)
   }
 
   if(predictive==TRUE){
-    if(p>=n || algo_large_p == T){
+    if(p>=n || force_highdim_algo == T){
       results = append(list(V=V),results)
     } else{
       if(fullVar==FALSE){
@@ -341,11 +340,12 @@ getParamsEPprobit = function(X,y,nu2,
   return(results)
 }
 
-predictEPprobit = function(paramsEP,xNew,nu2,algo_large_p=FALSE){
+predictEPprobit = function(paramsEP,xNew,nu2,force_highdim_algo=FALSE){
+  
   p = length(paramsEP$meanBeta)
   n = length(paramsEP$kEP)
 
-  if(p>=n || algo_large_p==T){
+  if(p>=n || force_highdim_algo==T){
     Xx = X%*%xNew
     KVtx = paramsEP$k*(t(paramsEP$V)%*%xNew)
     sd = as.double(sqrt(1+nu2*(sum(xNew^2)-sum(KVtx*Xx))))
