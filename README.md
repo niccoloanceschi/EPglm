@@ -1,7 +1,7 @@
 # EPGLM
 R codes for efficient expectation propagation for generalized linear models under Gaussian prior.
 
-Authors: Niccolò Anceschi, Augusto Fasano, Beatrice Franzolini, and Giovanni Rebaudo.
+Authors: [Niccolò Anceschi](https://niccoloanceschi.github.io), [Augusto Fasano](https://sites.google.com/view/augustofasano/home), [Beatrice Franzolini](https://beatricefranzolini.github.io), and [Giovanni Rebaudo](https://giovannirebaudo.github.io).
 
 Overview
 
