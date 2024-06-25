@@ -614,6 +614,8 @@ getParamsEP = function(X,y,family,Omega0,beta0,nu_g=NULL,
   
   ### Pre-Computations
   
+  diag_prior = Matrix::isDiagonal(Omega0) 
+  
   if(diag_prior){
     Q0 = diag(1/diag(Omega0),p,p)
     r = beta0/diag(Omega0)
@@ -742,7 +744,7 @@ getParamsEP = function(X,y,family,Omega0,beta0,nu_g=NULL,
     
     logDetQ = determinant(Q, logarithm = TRUE)
     logML = sum(logZ) + 0.5*crossprod(r,meanBeta) - logZ0 + 
-      0.5*logDetQ0$modulus[1] - 0.5*logDetQ$modulus[1] 
+      0.5*logDetQ0 - 0.5*logDetQ$modulus[1] 
     
   }else{
     
